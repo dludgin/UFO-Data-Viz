@@ -199,16 +199,16 @@
           .data(data)
           .join('path')
           .attr('transform', d => `translate(${xScale(d.Month)}, ${yScale(d.durationMin)})`)
-          .attr('fill', d => colorScale(d.cluster))
+          .attr('fill', "rgb(235, 255, 119)")
           .attr('d', d => symbol()) // Notice, the output of the d3.symbol is wired up to the "d" attribute.
           .on("mouseover", function(event, d) {
              tooltip.transition()
                .duration(200)
                .style("opacity", .9);
              tooltip.html("(Double click for full witness account) <br/>" + "Date: " + d.Date + "<br/>Duration: " + d.durationMin + " minutes <br/>" + "Shape: " + d.Shape + "<br/> <br/> Witness's Account Summary: " + d.Summary)
-               .style("left", 30)
+               .style("left", 20)
               //  .style("background", "black")
-               .style("top", height + 50);
+               .style("top", 20);
 
               d3.select(this)
                 .attr("fill", "black")
@@ -220,7 +220,7 @@
                .style("opacity", 0);
 
              d3.select(this)
-                .attr("fill", colorScale(d.cluster))
+                .attr("fill", "rgb(235, 255, 119)")
                 .attr("d", symbol.size(64));
 
            })
