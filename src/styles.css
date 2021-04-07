@@ -1,0 +1,77 @@
+body {
+  background-color: gray;
+  color: white;
+}
+
+.header {
+  background-color: rgb(48, 48, 48);
+  font-family: fantasy;
+  text-align: center;
+  margin: 35x 50x;
+  padding: 2% 1% 1% 1%;
+}
+
+.narrative {
+  background-color: rgb(48, 48, 48);
+  font-family: fantasy;
+  font-size: 13px;
+  text-align: center;
+  margin: 35x 50x;
+  padding: 1% 1% 1% 1%;
+}
+
+.instruction-font {
+  font-family: fantasy;
+  font-size: 12px;
+  text-align: center;
+}
+
+.filter-row1 {
+  padding: 1% 2% 0% 2%;
+  text-align: center;
+}
+
+.filter-row2 {
+  padding: 1% 2% 1% 2%;
+  text-align: center;
+}
+
+.slider {
+  width: 88%;
+  padding: 0% 10%;
+}
+
+.btn {
+  width: 75%;
+}
+
+.sort-content {
+  background-color: lightblue;
+  padding: 200px 0px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: darkslategray;
+  cursor: pointer;
+}
