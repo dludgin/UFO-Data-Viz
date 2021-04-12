@@ -1,0 +1,41 @@
+#chart-area svg {
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#logo {
+	height:50px;
+}
+
+.navbar-brand {
+	height: 60px;
+	padding: 5px 0px;
+}
+
+#slider-div {
+	width:600px;
+	margin-left:20px;
+    margin-right:auto;
+    margin.bottom:50px;
+
+}
+
+#histo-div {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+.hidden {
+    display: inline-block;
+    margin: 0 auto;
+    fill: #272727;
+ }
+
+ .seen {
+    display: inline-block;
+    margin: 0 auto;
+    fill: #b90000;
+ }

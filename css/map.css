@@ -1,0 +1,21 @@
+.continent {
+	fill: #000000;
+	stroke: #ffffff;
+	stroke-width: 0.5;
+	stroke-opacity: .4;
+}
+
+.circles {
+	fill: #ccff40;
+	fill-opacity: .5;
+}
+
+.labels {
+	font-family: sans-serif;
+	font-size: 11px;
+	fill: #0a0909;
+}
+
+.removecircles {
+	fill: #c00000;
+}
