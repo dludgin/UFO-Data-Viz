@@ -1,14 +1,14 @@
 var w = 600;
 var h = 400;
 const maxYear = 2019;
-const minYear = 2009;
+const minYear = 2010;
 const maxDate = "2019-12-31";
-const minDate = "2009-01-01";
+const minDate = "2010-01-01";
 
 
 
   //histogram setup
-var margin = {top: 20, right: 30, bottom: 20, left: 20},
+var margin = {top: 20, right: 30, bottom: 50, left: 20},
     width = 600,
     height = 60;
 
@@ -29,10 +29,10 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
 
     
     var x = d3.scaleTime()
-          .domain([new Date(minYear, 1, 1), new Date(maxYear, 1, 1)])
+          .domain([parseTime(minDate).getTime(), parseTime(maxDate).getTime()])
           .rangeRound([0, width]);
     const y = d3.scaleLinear()
-            .range([height - margin.top, margin.bottom]);
+            .range([height, 0]);
 
     // set the parameters for the histogram
     var histogram = d3.histogram()
@@ -78,7 +78,7 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
         .attr("height", height + margin.top + margin.bottom)
         .append('g')
         .attr("transform", 
-             "translate(" + margin.left + "," + margin.top + ")");
+             "translate(" + margin.left + "," + margin.bottom + ")");
         
         
     //Map Setup
@@ -181,7 +181,7 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
         
     // load data  
     var usMap = d3.json("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json");
-    var sightings = d3.csv("ufoV6(10yr).csv");
+    var sightings = d3.csv("ufoV6(2010_2019).csv");
    
 Promise.all([usMap, sightings]).then(function(values){    
  // draw map
@@ -194,7 +194,7 @@ Promise.all([usMap, sightings]).then(function(values){
 
         // formattedData = (values[1]).filter(d => { return ((d.State === 'IL'))})
         formattedData = (values[1]).filter(d => { return ((d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
-        formattedData = (values[1]).filter(d => { return ((d.Year === '2013') && (d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
+        // formattedData = (values[1]).filter(d => { return ((d.Year === '2013') && (d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
         // && (d.Year >= 2009) && (d.Year <= 2010)
         // formattedData = (values[1])
         // formattedData.forEach(function(d) {
@@ -234,11 +234,11 @@ Promise.all([usMap, sightings]).then(function(values){
                 return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
             .attr("width", function(d) {
                 return ((width/bins.length)*.9) })
-            .attr("height", function(d) { return height - y(d.length); })
+            .attr("height", function(d) { return (height) - y(d.length); })
 
         // add the x Axis
         svgH.append("g")
-            .attr("transform", "translate(0," + (-margin.top/2) + ")")
+            .attr("transform", "translate(0," + (-margin.bottom) + ")")
             .call(d3.axisBottom(x));
 
      
