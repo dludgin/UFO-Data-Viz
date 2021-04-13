@@ -1,5 +1,5 @@
-var w = 1000;
-var h = 700;
+var w = 600;
+var h = 400;
 const maxYear = 2019;
 const minYear = 2009;
 const maxDate = "2019-12-31";
@@ -40,43 +40,54 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
         .domain(x.domain())
         .thresholds(x.ticks(d3.timeMonth));
 
-        const witnessAccount = d3.select("body").append("div")
-        .attr("class", "witnessAccount")
-        .style("opacity", 0);
-    // witness.show = function {
-    //           witnessAccount.transition()
-    //            .duration(200)
-    //             .style("opacity", .9);
-    //           witnessAccount.html("Date: " + d.Date + "<br/>Duration: " + d.durationMin + " minutes <br/>" + "Shape: " + d.Shape + "<br/> <br/> Witness's Account: <br/>" + d.Text + "<br/> <br/> Link to Report: <br/>" + d.report_link)
-    //             .style("left", width + 30)
-    //             // .style("background", "black")
-    //             .style("top", 80);
-              
-              // d3.select(this)
-              //   .attr("fill", "yellow")
-              //   .attr("d", symbol.size(64 * 4));
 
-            // })
+    // const witnessAccount = d3.select("body").append("div")
+    //     .attr("class", "witnessAccount")
+    //     .style("opacity", 0);
+
+    // function witness() {
+    //         svg.append('text')
+    //         .html(d => {
+    //             let text = `<span style='color:red;text-transform:capitalize'><strong>Witness Account:</strong></span><br>`
+    //             text += `<span style='color:white'>${d.Summary}</span><br>`
+                
+    //             return text
+    //         })
+    //     }
+    // const tipBig = svg.append('text')
+    // .attr('class', 'd3-tip')
+    //     .html(d => {
+    //         let text = `<span style='color:red;text-transform:capitalize'><strong>Witness Account:</strong></span><br>`
+    //         text += `<span style='color:white'>${d.Summary}</span><br>`
+            
+    //         return text
+    //     })
+    // var witnessAccount = d3.select("#deets").append("div")
+    //     .attr("class", "witnessAccount")
+    //     .style("opacity", 0);
+    // var details = d3.select("#chart-area").append("svg");
+
+
 
     // append the svg object to the body of the page
     // append a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svgH = d3.select("#histo-area").append("svg")
+    var svgH = d3.select("#histo-area").append("svg").style("background-color","#000000").style("color","#ffffff")
         // .attr("transform", "translate(" + 10 + "," + 0 + ")")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append('g')
         .attr("transform", 
-             "translate(" + margin.left + "," + 0 + ")");
+             "translate(" + margin.left + "," + margin.top + ")");
         
         
     //Map Setup
     
 
-    var svg = d3.select("#chart-area").append("svg").attr("preserveAspectRatio", "xMinYMin meet").style("background-color","#000000")
+    var svg = d3.select("#chart-area").append("svg").style("background-color","#000000")
         .attr("viewBox", "0 0 " + w + " " + h)
         .classed("svg-content", true);
-    var projection = d3.geoAlbersUsa().translate([w/2, h/2]);
+    var projection = d3.geoAlbersUsa().translate([w/2, h/(2)]).scale(700);
     var path = d3.geoPath().projection(projection);
     // console.log(path)
 
@@ -95,7 +106,13 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
     const g = svg.append("g")
         .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
     
-
+    var div = d3.select("#details-area").append("div")
+        .attr("class", "tooltip")
+        .attr("viewBox", "0 0 " + w + " " + h)
+        // .attr("width", w)
+        // .attr("height", "40px")
+        // .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
+        .style("opacity", 0);
     
     // g.append("path")
     //     .attr("class", "line")
@@ -103,9 +120,14 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
     //     .attr("stroke-width", "3px")
     //     .on("mouseover", tip.show)
     //     .on("mouseout", tip.hide);
+    
+
 
     let time = 0
     g.call(tip)
+    // g.call(tipBig)
+
+
 
 
     $("#date-slider").slider({
@@ -159,7 +181,7 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
         
     // load data  
     var usMap = d3.json("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json");
-    var sightings = d3.csv("ufoV6(10yr without text).csv");
+    var sightings = d3.csv("ufoV6(10yr).csv");
    
 Promise.all([usMap, sightings]).then(function(values){    
  // draw map
@@ -172,6 +194,7 @@ Promise.all([usMap, sightings]).then(function(values){
 
         // formattedData = (values[1]).filter(d => { return ((d.State === 'IL'))})
         formattedData = (values[1]).filter(d => { return ((d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
+        formattedData = (values[1]).filter(d => { return ((d.Year === '2013') && (d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
         // && (d.Year >= 2009) && (d.Year <= 2010)
         // formattedData = (values[1])
         // formattedData.forEach(function(d) {
@@ -190,10 +213,10 @@ Promise.all([usMap, sightings]).then(function(values){
             d.year = d.Year
         });
 
-        // formattedData.forEach(function(d) {
-        //     d.date = parseDate(d.Date)
-        //     d.year = d.Year
-        // });
+        formattedData.forEach(function(d) {
+            d.date = parseTime(d.Date)
+            d.year = d.Year
+        });
 
         var bins = histogram(formattedData);
 
@@ -215,7 +238,7 @@ Promise.all([usMap, sightings]).then(function(values){
 
         // add the x Axis
         svgH.append("g")
-            .attr("transform", "translate(0," + 10 + ")")
+            .attr("transform", "translate(0," + (-margin.top/2) + ")")
             .call(d3.axisBottom(x));
 
      
@@ -248,7 +271,10 @@ Promise.all([usMap, sightings]).then(function(values){
 
     function update(data) {
         const t = d3.transition()
-		    .duration(5000)
+		    .duration(1000)
+        
+            x.domain([w,0])
+            y.domain([0,h])
 
         // console.log(data)
         const sliderValues = $("#date-slider").slider("values")
@@ -270,21 +296,82 @@ Promise.all([usMap, sightings]).then(function(values){
             // .attr("class","removecircles")
             .transition(t)
               .attr("r", "0px")
-              .attr("opacity", 0)
+              .attr("fill-opacity", 0)
               .remove()
         
+              
         circles.enter().append("circle")
-            .data(filteredData)
+            .attr('fill-opacity', 0)
             .attr("r", "0px")
             .merge(circles)
+            
             .attr("class","circles")
-                .attr("cy", function(d) {return (d.Long);})
-                .attr("cx", function(d) {return (d.Lat);})
+                .attr("cy", d => (d.Long))
+                .attr("cx", d => (d.Lat))
+                .attr("text", d => (d.Summary))
+                .attr('d', function(d) {return (d);})
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide)
                 // .on("click", tip.hide)
-                .transition(t)
-                    .attr("r", "1px");
+                .on("click", function(d) {
+                    // .style("opacity", 0)
+                    div.transition()
+                      .duration(200)
+                      .style("opacity", 1);
+                    div .html(
+                        "<strong>"+"Date:  "+"</strong>" +  (d.Date) + "</br>" +
+                        "<strong>"+"Location:  "+"</strong>" +  (d.City) + ", " + (d.State) + "</br>" +
+                        "<strong>"+"Shape:  "+"</strong>" +  (d.Shape) + "</br>" + "</br>" +
+                        "<strong>"+"Witness Account:"+"</strong>" + "</br>" + (d.Text) + "</br>" + '<a href= "'+d.report_link+'" target="_blank">' + //with a link
+                        "Click to see Full Report" +
+                        "</a>")      
+                    .style("transform", 
+                        "translate(" + 0 + "," + h/(2.5) + ")")
+                      .style("top", (h*1.43) + "px")             
+                      .style("bottom", (0) + "px")
+                      .style("margin-left", (.1*w))
+                      .style("margin-right", (.1*w))
+                      .style("width", (.8*w));
+                    })
+                // .html(d => {
+                //     let text = `${d.Summary}`
+                //     console.log(text)
+                //         return text
+                //     })
+                // .on('click', details())
+                .transition((t))
+                    .attr("r", "1px")
+                    .attr('fill-opacity',.9);
+            // console.log(text)
+            }
+
+
+            // function details() {
+            //     const tipBig = svg.append('text')
+            //         .attr('class', 'd3-tip')
+            //             .html(d => {
+            //                 let text = `<span style='color:red;text-transform:capitalize'><strong>Witness Account:</strong></span><br>`
+            //                 text += `<span style='color:white'>${d.Summary}</span><br>`
+            //                     return text
+            //                 })
+            // }
+            // .html(
+            //     "Witness Account:" + "</br>" + (d.Text) + "</br>" + "Link to Full Report: " + '<a href>' + // The first <a> tag
+            //     (d.report_link) +
+            //     "</a>")     
+            //     .style("left", (d3.event.pageX) + "px")             
+            //     .style("top", (d3.event.pageY - 28) + "px");
+            //   });
+            
+            // const deets = d3.select("#chart-area").append("svg")
+            //     .attr('font-size',12)
+            //     .html(d => {
+            //         let text = `<span style='color:red;text-transform:capitalize'><strong>Witness Account:</strong></span><br>`
+            //         text += `<span style='color:white'>${d.Summary}</span><br>`
+                    
+            //         return text
+            // })
+            // .attr('d', d => symbol())
 
             // const rectX = d3.scaleLinear()
             //     .domain([2009, 2019])
@@ -354,5 +441,5 @@ Promise.all([usMap, sightings]).then(function(values){
         //     .attr("transform", "translate(0," + height + ")")
         //     .call(d3.axisBottom(x));
         
-}
+// }
 
