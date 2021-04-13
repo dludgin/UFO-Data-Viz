@@ -23,7 +23,12 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
 
 
-
+    var durScale = d3.scaleLog()
+        .domain([.00033, 10080])
+        .range([1, 3])
+        .base(2);
+    
+    console.log(durScale(.0033))
     
     var x = d3.scaleTime()
           .domain([parseTime(minDate).getTime(), parseTime(maxDate).getTime()])
@@ -304,6 +309,7 @@ Promise.all([usMap, sightings]).then(function(values){
                 .attr("cy", d => (d.Long))
                 .attr("cx", d => (d.Lat))
                 .attr("text", d => (d.Summary))
+                .attr("r", d => durScale((d.Duration_mins)))
                 .attr('d', function(d) {return (d);})
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide)
@@ -331,8 +337,8 @@ Promise.all([usMap, sightings]).then(function(values){
                     })
 
                 .transition((t))
-                    .attr("r", "1px")
-                    .attr('fill-opacity',.9);
+                    // .attr("r", d => (d.Duration_mins))
+                    .attr('fill-opacity',.8);
 
             }
 
