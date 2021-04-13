@@ -38,7 +38,9 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
           .range([0, 10080])
           .exponent(327);
 
+
           console.log(xD.invert(327))
+
 
     const y = d3.scaleLinear()
             .range([height, 0]);
@@ -92,10 +94,11 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     const tip = d3.tip()
     .attr('class', 'd3-tip')
         .html(d => {
-            let text = `<strong>City:</strong> <span style='color:red;text-transform:capitalize'>${d.City}</span><br>`
-            text += `<strong>State:</strong> <span style='color:red;text-transform:capitalize'>${d.State}</span><br>`
-            text += `<strong>Shape:</strong> <span style='color:red'>${d.Year}</span><br>`
-            text += `<strong>Summary:</strong> <span style='color:white'>${d.Summary}</span><br>`
+            let text = `<strong>City:</strong> <span style='text-transform:capitalize'>${d.City}</span><br>`
+            text += `<strong>State:</strong> <span style='text-transform:capitalize'>${d.State}</span><br>`
+            text += `<strong>Shape:</strong> <span style='text-transform:capitalize'>${d.Shape}</span><br>`
+            text += `<strong>Summary:</strong> <span style='text-transform:capitalize'>${d.Summary}</span><br>`
+            text += `<strong>Click for Full Details</strong>`
             
             return text
         })
@@ -107,13 +110,16 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     var div = d3.select("#details-area").append("div")
         .attr("class", "tooltip")
         .attr("viewBox", "0 0 " + w + " " + h)
+
         .style("opacity", 0);
+    
 
     
 
 
     let time = 0
     g.call(tip)
+    // g.call(tipBig)
 
 
 
@@ -143,6 +149,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
         range: true,
         max: xD(10080),
         min: 0,
+        // step: Math.log(5),
 	    values: [
             0,
             10080
@@ -159,6 +166,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     })
 
 
+// console.log(ui.values[0])
  
 
     
@@ -181,16 +189,14 @@ Promise.all([usMap, sightings]).then(function(values){
 
 
         formattedData.forEach(function(d) {
+
             d.Lat = projection([d.Longitude, d.Lattitude])[0]
             d.Long = projection([d.Longitude, d.Lattitude])[1]
             d.date = parseTime(d.Date)
             d.year = d.Year
         });
 
-        formattedData.forEach(function(d) {
-            d.date = parseTime(d.Date)
-            d.year = d.Year
-        });
+
 
         var bins = histogram(formattedData);
         
@@ -227,11 +233,16 @@ Promise.all([usMap, sightings]).then(function(values){
             .enter().append("rect")
             .attr("opacity",.8)
             .attr("fill", "#ccff40")
+            // .attr("rect-anchor","center,bottom")
             .attr("x", 0)
                 .attr("transform", function(d) { return "translate(" + xD(d.x0) + "," + yD(d.length + 1) + ")"; })
                 .attr("width", (width/(durationBins + 10)))
                 .attr("height", function(d) { return height - yD(d.length + 1); })
 
+
+                
+
+        // add the x Axis
         svgDH.append("g")
             .attr("transform", "translate(0," + (-margin.bottom) + ")")
             .attr("class", "axis")
@@ -256,10 +267,11 @@ Promise.all([usMap, sightings]).then(function(values){
         const shape = $("#shape-select").val()
 
 
+        // console.log(data)
         const sliderValues = $("#date-slider").slider("values")
         const durationValues = $("#duration-slider").slider("values")
         console.log(shape)
-
+    
         const filteredData = formattedData.filter(d => { 
             if (shape === "All") {return ((d.date >= sliderValues[0]) && (d.date <= sliderValues[1]) && (d.Duration_mins >= xD.invert(durationValues[0])) && (d.Duration_mins <= xD.invert(durationValues[1])))}
             else 	{ 
@@ -276,6 +288,7 @@ Promise.all([usMap, sightings]).then(function(values){
 
 
         circles.exit()
+            // .attr("class","removecircles")
             .transition(t)
               .attr("r", "0px")
               .attr("fill-opacity", 0)
@@ -296,6 +309,7 @@ Promise.all([usMap, sightings]).then(function(values){
                 .on("mouseout", tip.hide)
                 // .on("click", tip.hide)
                 .on("click", function(d) {
+                    // .style("opacity", 0)
                     div.transition()
                       .duration(200)
                       .style("opacity", 1);
@@ -321,3 +335,6 @@ Promise.all([usMap, sightings]).then(function(values){
                     .attr('fill-opacity',.9);
 
             }
+
+
+
