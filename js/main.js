@@ -1,9 +1,10 @@
-var w = 600;
-var h = 400;
+var w = 600,
+    h = 400,
+    centered;
 const maxYear = 2019;
 const minYear = 2010;
 const maxDate = "2019-12-31";
-const minDate = "2010-01-01";
+const minDate = "2015-01-01";
 
 const durationBins = 120;
 
@@ -24,7 +25,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
 
     var durScale = d3.scaleLog()
-        .domain([.00033, 4, 10080])
+        .domain([.0003, 4, 6000])
         .range(["#CA7437", "#5894C2", "#ffffff"])
         .interpolate(d3.interpolateHcl)
         .base(2);
@@ -33,7 +34,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     //     .range([.5, 1])
     //     .base(5);
     
-    console.log(durScale(.0033))
+    // console.log(durScale(.0033))
     
     var x = d3.scaleTime()
           .domain([parseTime(minDate).getTime(), parseTime(maxDate).getTime()])
@@ -49,14 +50,14 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
           .exponent(327);
 
 
-          console.log(xD.invert(327))
+        //   console.log(xD.invert(327))
 
 
     const y = d3.scaleLinear()
-            .range([height, 0]);
+            .range([height,0]);
     
-    const yD = d3.scaleLinear()
-            // .base(5)
+    const yD = d3.scaleLog()
+            .base(10)
             .range([height, 0]);
 
     // set the parameters for the histogram
@@ -96,22 +97,33 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
     var svg = d3.select("#chart-area").append("svg").style("background-color","#000000")
         .attr("viewBox", "0 0 " + w + " " + h)
+        // .style("border-width","1px")
+        // .style("border-color", "blue")
         .classed("svg-content", true);
+
+    // svg.append("rect")
+    //     .attr("class", "background")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .on("click", clicked);
+
     var projection = d3.geoAlbersUsa().translate([w/2, h/(2)]).scale(700);
     var path = d3.geoPath().projection(projection);
     // console.log(path)
 
     const tip = d3.tip()
-    .attr('class', 'd3-tip')
-        .html(d => {
-            let text = `<strong>City:</strong> <span style='text-transform:capitalize'>${d.City}</span><br>`
-            text += `<strong>State:</strong> <span style='text-transform:capitalize'>${d.State}</span><br>`
-            text += `<strong>Shape:</strong> <span style='text-transform:capitalize'>${d.Shape}</span><br>`
-            text += `<strong>Summary:</strong> <span style='text-transform:capitalize'>${d.Summary}</span><br>`
-            text += `<strong>Click for Full Details</strong>`
-            
-            return text
-        })
+        
+        .attr('class', 'd3-tip')
+            .html(d => {
+                let text = `<strong>City:</strong> <span style='text-transform:capitalize'>${d.City}</span><br>`
+                text += `<strong>State:</strong> <span style='text-transform:capitalize'>${d.State}</span><br>`
+                text += `<strong>Shape:</strong> <span style='text-transform:capitalize'>${d.Shape}</span><br>`
+                text += `<strong>Duration:</strong> <span style='text-transform:capitalize'>${formatDur(d.Duration_mins)} mins</span><br>`
+                text += `<strong>Summary:</strong> <span style='text-transform:capitalize'>${d.Summary}</span><br>`
+                text += `<strong>Click for Full Details</strong>`
+                return text
+            })
+                
     
 
     const g = svg.append("g")
@@ -144,7 +156,13 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
                 parseTime(minDate).getTime(),
                 parseTime(maxDate).getTime()
             ],
+            // create: (event, ui) => {
+            //     $("#dateLabel1").text(1262322000000),
+            //     $("#dateLabel2").text(1577768374944);
+            //     update();
+            // },
             // slide: updateRange,
+
             slide: (event, ui) => {
                 $("#dateLabel1").text(formatTime(ui.values[0])),
                 $("#dateLabel2").text(formatTime(ui.values[1]));
@@ -177,6 +195,16 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
         }
     })
 
+let zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .translateExtent([[-500, -300], [1100, 700]])
+    .on('zoom', () => {
+        svg.attr('transform', d3.event.transform)
+    }, {passive: true});
+ 
+svg.call(zoom);
+
+
 
 // console.log(ui.values[0])
  
@@ -195,9 +223,16 @@ Promise.all([usMap, sightings]).then(function(values){
         .enter()
         .append("path")
         .attr("class","continent")
-        .attr("d", path),
+        .attr("d", path)
+        // .enter().append("path")
+        // .attr("d", path)
+        // .on("click", clicked);
 
-        formattedData = (values[1]).filter(d => { return ((d.State !== 'WA') && (d.State !== 'DE') && (d.State !== 'GA'))})
+        formattedData = (values[1]).filter(d => { return ((d.Year >= '2015'))})
+    
+
+  
+ 
 
 
         formattedData.forEach(function(d) {
@@ -215,7 +250,8 @@ Promise.all([usMap, sightings]).then(function(values){
 
         // y.domain([0, d3.max(bins, function(d) { return d.length; })]);
     
-
+        let bins = histogram(formattedData);
+        // y.domain([0, d3.max(bins, function(d) { return d.length; })]);
 
         // svgH.selectAll("rect")
         //     .data(bins)
@@ -223,47 +259,62 @@ Promise.all([usMap, sightings]).then(function(values){
         //     .attr("opacity",.8)
         //     .attr("fill", "#ccff40")
         //     .attr("rect-anchor","center,bottom")
-        //     .attr("x", 1)
+            
         //     .attr("transform", function(d) {
-        //         return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
+        //         return "translate(" + (x(d.x0)-1) + "," + (y(d.length)) + ")"; })
         //     .attr("width", function(d) {
         //         return (width/130) })
-        //     .attr("height", function(d) { return (height) - y(d.length); })
+        //     .attr("height", function(d) { return (height - y(d.length)); })
+        //     .attr("y", 0)
 
-        // // add the x Axis
+        // // // add the x Axis
         svgH.append("g")
             .attr("transform", "translate(0," + (-margin.bottom) + ")")
             .call(d3.axisBottom(x));
 
-        var binsDur = histogramDur(formattedData);
-        yD.domain([1, d3.max(binsDur, function(d) { return d.length; })]);
         
-
-        svgDH.selectAll("rect")
-            .data(binsDur)
-            .enter().append("rect")
-            .attr("opacity",.8)
-            .attr("fill", "#ccff40")
-            // .attr("rect-anchor","center,bottom")
-            .attr("x", 0)
-                .attr("transform", function(d) { return "translate(" + xD(d.x0) + "," + yD(d.length + 1) + ")"; })
-                .attr("width", (width/(durationBins + 10)))
-                .attr("height", function(d) { return height - yD(d.length + 1); })
-
-
-                
-
-        // add the x Axis
-        svgDH.append("g")
-            .attr("transform", "translate(0," + (-margin.bottom) + ")")
-            .attr("class", "axis")
-            .call(d3.axisBottom(xD)
-                .ticks(10)
-                .tickFormat(d3.format(",.3~f")));
-            
+            // const sliderValues =([1262322000000, 1577768374944])
+        var binsDur = histogramDur(formattedData);
+        // yD.domain([1, d3.max(binsDur, function(d) { return d.length; })]);
+        
+        // svgDH.selectAll("rect")
+        //     .data(binsDur)
+        //     .enter().append("rect")
+        //     .attr("opacity",.8)
+        //     // .attr("fill", "#ccff40")
+        //     .style("fill", function(d){ return durScale(d.x0)})
+        //     // .attr("rect-anchor","center,bottom")
+        //     .attr("x", 0)
+        //         .attr("transform", function(d) { return "translate(" + xD(d.x0) + "," + yD(d.length + 1) + ")"; })
+        //         .attr("width", (width/(50)))
+        //         .attr("height", function(d) { return height - yD(d.length + 1); })
+        
+            svgDH.append("g")
+                .attr("transform", "translate(0," + (-margin.bottom) + ")")
+                .attr("class", "axis")
+                .call(d3.axisBottom(xD)
+                    .ticks(10)
+                    .tickFormat(d3.format(",.3~f")));
 
      
       $("#shape-select").on("change", update)
+
+    //   $("#date-slider").create (event, ui) => {
+    //         $("#dateLabel1").text(1262322000000),
+    //         $("#dateLabel2").text(1577768374944),
+    //         update();
+    //     },
+    //     // slide: updateRange,
+
+    //     // slide: (event, ui) => {
+    //     //     $("#dateLabel1").text(formatTime(ui.values[0])),
+    //     //     $("#dateLabel2").text(formatTime(ui.values[1]));
+    //     //     // update(formattedData)
+    //     // },
+    //     // stop: (event, ui) => {
+    //     //     update(formattedData)
+    //     // },
+    // });
 
         update()
         
@@ -273,15 +324,17 @@ Promise.all([usMap, sightings]).then(function(values){
         
 
         const t = d3.transition()
-		    .duration(1000)
+		    .duration(500)
         
         const shape = $("#shape-select").val()
 
 
+
         // console.log(data)
         const sliderValues = $("#date-slider").slider("values")
+        // console.log(sliderValues)
         const durationValues = $("#duration-slider").slider("values")
-        console.log(shape)
+        // console.log(shape)
     
         const filteredData = formattedData.filter(d => { 
             if (shape === "All") {return ((d.date >= sliderValues[0]) && (d.date <= sliderValues[1]) && (d.Duration_mins >= xD.invert(durationValues[0])) && (d.Duration_mins <= xD.invert(durationValues[1])))}
@@ -318,22 +371,47 @@ Promise.all([usMap, sightings]).then(function(values){
                 .attr("cx", d => (d.Lat))
                 .attr("text", d => (d.Summary))
                 .attr("fill", d => durScale((d.Duration_mins)))
-                // .attr("r", d => durScaleSize((d.Duration_mins)))
-                .attr('d', function(d) {return (d);})
+                
+                
+                // .on("mouseover", tip.show, function(event, d) {
+                    
+                    // d3.select(this)
+                    //    .attr("fill", "White")
+                    //    .attr("fill-opacity",".9")
+                    //    .attr("r", "1.5px");
+                    // })
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide)
+                // .on("mouseout", function(event, d) {
+                //     d3.select(this)
+                //       .attr("fill", d => durScale((d.Duration_mins)))
+                //       .attr("r", "1px");
+                //    })
+                .attr('d', function(d) {return (d);})
                 // .on("click", tip.hide)
+                .on("click", function(event, d) {
+                    // .style("opacity", 0)
+                    d3.select(this)
+                       .style("fill", "White")
+                       .attr("fill-opacity",".9")
+                       .attr("r", "1px");
+                    })
                 .on("click", function(d) {
                     // .style("opacity", 0)
+                    d3.select(this)
+                       .attr("fill", "White")
+                       .attr("fill-opacity",".9")
+                       .attr("r", "1px");
                     div.transition()
                       .duration(200)
+                    //   .style("fill","white")
                       .style("opacity", 1);
                     div .html(
                         "<strong>"+"Date:  "+"</strong>" +  (d.Date) + "</br>" +
                         "<strong>"+"Location:  "+"</strong>" +  (d.City) + ", " + (d.State) + "</br>" +
-                        "<strong>"+"Shape:  "+"</strong>" +  (d.Shape) + "</br>" + "</br>" +
-                        "<strong>"+"Duration of Encounter:  "+"</strong>" +  (d.Duration_mins) + " minutes" + "</br>" + "</br>" +
-                        "<strong>"+"Witness Account:"+"</strong>" + "</br>" + (d.Text) + "</br>"+'<a href= "'+d.report_link+'" target="_blank" >' + //with a link
+                        "<strong>"+"Shape:  "+"</strong>" +  (d.Shape) + "</br>" +
+                        "<strong>"+"Duration of Encounter:  "+"</strong>" +  (formatDur(d.Duration_mins)) + " minutes" + "</br>" + "</br>" +
+                        "<strong>"+"Witness Account:"+"</strong>" + "</br>" + (d.Text) + "</br>"+'<a href= "'+d.report_link+' " style="color:#ccff40"" target="_blank" >' + //with a link
                          "Click to see Full Report" + 
                         "</a>")      
                     .style("transform", 
@@ -344,41 +422,69 @@ Promise.all([usMap, sightings]).then(function(values){
                       .style("margin-right", (.1*w))
                       .style("width", (.8*w));
                     })
+                    .transition((t))
+                        .attr("r", "1.5px")
+                        .attr('fill-opacity',.8);
 
-                .transition((t))
-                    .attr("r", "1px")
-                    .attr('fill-opacity',.7);
-
-                let bins = histogram(filteredData);
+                let bins = histogram(formattedData);
+                let binsUpdate = histogram(filteredData);
         
-                    console.log(bins)
-                y.domain([0, d3.max(bins, function(d) { return d.length; })]);
+                    // console.log(bins)
+                y.domain([0, d3.max(binsUpdate, function(d) { return d.length; })]);
                 
 
                 const rects = svgH.selectAll("rect")
-                    .data(bins)
+                    .data(binsUpdate)
 
                 rects.exit()
-                    // .attr("class","removecircles")
                     .transition(t)
-                      .attr("height", "0px")
-                    //   .attr("fill-opacity", 0)
-                      .remove()
+                        .attr("height", 0)
+                        .attr("y", function(d) { return (height - y(d.length));})
+                        .remove()
 
 
                 rects.enter().append("rect")
-                    .attr("opacity",.8)
-                    .attr("fill", "#ccff40")
-                    .attr("rect-anchor","center,bottom")
-                    .attr("x", 1)
-                    .attr("transform", function(d) {
-                        return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
-                    .attr("width", function(d) {
-                        return (width/130) })
-                    .attr("height", function(d) { return (height) - y(d.length); })
-        
-                
+                    .attr("height",0)
+                    .attr("y", 0)
+                    .attr("fill","#ccff40")
+                    .merge(rects)
+                        .attr("opacity",.8)
+                        .attr("rect-anchor","center,bottom")
+                        .attr("x", d => x(d.x0))
+                        .attr("width", function(d) {return (width/130) })
+                        .transition((t))
+                            .attr("y", d=> y(d.length))
+                            .attr("height", function(d) { return (height - y(d.length)); 
+                })
 
+
+                var binsDurUpdate = histogramDur(filteredData);
+                var binsDur = histogramDur(formattedData);
+                yD.domain([1, d3.max(binsDur, function(d) { return d.length; })]);
+                    
+                const rectD = svgDH.selectAll("rect")
+                    .data(binsDurUpdate)
+
+                rectD.exit()
+                    .transition(t)
+                        .attr("height", 0)
+                        .attr("y", function(d) { return (height - yD(d.length + 1));})
+                        .remove()
+
+                rectD.enter().append("rect")
+                    .attr("height",0)
+                    .attr("y", 0)
+                    .merge(rectD)
+                    .attr("opacity",.8)
+                    // .attr("fill", "#ccff40")
+                    .style("fill", function(d){ return durScale(d.x0)})
+                    // .attr("rect-anchor","center,bottom")
+                    .attr("rect-anchor","center,bottom")
+                    .attr("x", d => xD(d.x0))
+                    .attr("width", (width/(50)))
+                    .transition(t)
+                        .attr("y", d=> yD(d.length + 1))
+                        .attr("height", function(d) { return height - yD(d.length + 1); })
             }
 
 
