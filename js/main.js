@@ -24,9 +24,14 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
 
     var durScale = d3.scaleLog()
-        .domain([.00033, 10080])
-        .range([1, 3])
+        .domain([.00033, 4, 10080])
+        .range(["#CA7437", "#5894C2", "#ffffff"])
+        .interpolate(d3.interpolateHcl)
         .base(2);
+    
+    // var durScaleSize = d3.scaleLog()
+    //     .range([.5, 1])
+    //     .base(5);
     
     console.log(durScale(.0033))
     
@@ -112,6 +117,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     const g = svg.append("g")
         .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
     
+    
     var div = d3.select("#details-area").append("div")
         .attr("class", "tooltip")
         .attr("viewBox", "0 0 " + w + " " + h)
@@ -151,6 +157,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
     
     $("#duration-slider").slider({
+        
         range: true,
         max: xD(10080),
         min: 0,
@@ -203,31 +210,30 @@ Promise.all([usMap, sightings]).then(function(values){
 
 
 
-        var bins = histogram(formattedData);
+        // var bins = histogram(formattedData);
         
 
-        y.domain([0, d3.max(bins, function(d) { return d.length; })]);
+        // y.domain([0, d3.max(bins, function(d) { return d.length; })]);
     
 
 
-        svgH.selectAll("rect")
-            .data(bins)
-            .enter().append("rect")
-            .attr("opacity",.8)
-            .attr("fill", "#ccff40")
-            .attr("rect-anchor","center,bottom")
-            .attr("x", 1)
-            .attr("transform", function(d) {
-                return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
-            .attr("width", function(d) {
-                return (width/130) })
-            .attr("height", function(d) { return (height) - y(d.length); })
+        // svgH.selectAll("rect")
+        //     .data(bins)
+        //     .enter().append("rect")
+        //     .attr("opacity",.8)
+        //     .attr("fill", "#ccff40")
+        //     .attr("rect-anchor","center,bottom")
+        //     .attr("x", 1)
+        //     .attr("transform", function(d) {
+        //         return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
+        //     .attr("width", function(d) {
+        //         return (width/130) })
+        //     .attr("height", function(d) { return (height) - y(d.length); })
 
-        // add the x Axis
+        // // add the x Axis
         svgH.append("g")
             .attr("transform", "translate(0," + (-margin.bottom) + ")")
             .call(d3.axisBottom(x));
-        console.log(y)
 
         var binsDur = histogramDur(formattedData);
         yD.domain([1, d3.max(binsDur, function(d) { return d.length; })]);
@@ -285,12 +291,14 @@ Promise.all([usMap, sightings]).then(function(values){
                 && (d.Shape === shape))}
         })
 
+        
+        // durScaleSize.domain(filteredData.map(d => d.Duration_mins))
+
+
+    //    console.log(durScaleSize(4))
 
         const circles = svg.selectAll("circle")
             .data(filteredData)
-
- 
-
 
         circles.exit()
             // .attr("class","removecircles")
@@ -309,7 +317,8 @@ Promise.all([usMap, sightings]).then(function(values){
                 .attr("cy", d => (d.Long))
                 .attr("cx", d => (d.Lat))
                 .attr("text", d => (d.Summary))
-                .attr("r", d => durScale((d.Duration_mins)))
+                .attr("fill", d => durScale((d.Duration_mins)))
+                // .attr("r", d => durScaleSize((d.Duration_mins)))
                 .attr('d', function(d) {return (d);})
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide)
@@ -337,8 +346,38 @@ Promise.all([usMap, sightings]).then(function(values){
                     })
 
                 .transition((t))
-                    // .attr("r", d => (d.Duration_mins))
-                    .attr('fill-opacity',.8);
+                    .attr("r", "1px")
+                    .attr('fill-opacity',.7);
+
+                let bins = histogram(filteredData);
+        
+                    console.log(bins)
+                y.domain([0, d3.max(bins, function(d) { return d.length; })]);
+                
+
+                const rects = svgH.selectAll("rect")
+                    .data(bins)
+
+                rects.exit()
+                    // .attr("class","removecircles")
+                    .transition(t)
+                      .attr("height", "0px")
+                    //   .attr("fill-opacity", 0)
+                      .remove()
+
+
+                rects.enter().append("rect")
+                    .attr("opacity",.8)
+                    .attr("fill", "#ccff40")
+                    .attr("rect-anchor","center,bottom")
+                    .attr("x", 1)
+                    .attr("transform", function(d) {
+                        return "translate(" + (x(d.x0)-1) + "," + y(d.length) + ")"; })
+                    .attr("width", function(d) {
+                        return (width/130) })
+                    .attr("height", function(d) { return (height) - y(d.length); })
+        
+                
 
             }
 
