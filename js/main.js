@@ -83,7 +83,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     var svgDH = d3.select("#duration-area").append("svg").style("background-color","#000000").style("color","#ffffff")
         // .attr("transform", "translate(" + 10 + "," + 0 + ")")
 //         .attr("width", width + margin.left + margin.right)
-    	.attr("width", 33.33%)
+//     	.attr("width", 33.33%)
         .attr("height", height + margin.top + margin.bottom)
 //         .attr("viewBox", (-margin.left) + (-margin.top) + width + height)
         .append('g')
