@@ -14,7 +14,7 @@
 }
 
 #histo-div {
-	width: 100%;
+	width: 33.33%;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -88,7 +88,6 @@
     box-sizing:border-box;
     padding: 0 15px;
     width:100%;
-    margin-right:auto;
     margin-bottom:10px;
 }
 .filter-controls label {
