@@ -1,8 +1,9 @@
-# a4-mapyourbreath (New Team Name: Are we alone?)
+# A4-mapyourbreath
+(New Team Name: Are we alone?)
 
-DESIGN RATIONALE
+## DESIGN RATIONALE
 
-Overview
+### Overview
 
 For A4, we chose a dataset from the National UFO Reporting Center that contains over 80,000 reports of UFO sightings over the past century. This dataset was scraped, geolocated, and time standardized by Sigmond Axel. For each sighting, the data contains city, state, time, high-level & detailed descriptions, observed shape, and duration. We thought it would be fascinating to see the UFO stories that may have occurred in our hometowns.
 
@@ -10,7 +11,7 @@ Through exploring the dataset, we developed a series of questions. Are there dou
 
 We used these questions to think through what a user may wish to see in an Interactive Data Visualization built off this dataset and realized that the most interesting parts of the data are the hilarious, strange, and unusual stories found at the end of a discovery process. With this insight in mind, we focused on designing a data visualization that would assist the user’s exploration and help them filter down the thousands of UFO sightings to a meaningful set of stories with personal relevance. Our goal is to help users explore this dataset to learn about the variety and frequency of sightings that have occurred across the country and in their own backyard.
 
-Visualization Design
+### Visualization Design
 
 For our visualization, we designed for the user’s journey in 3 sequential layers.
 
@@ -26,26 +27,25 @@ Layer 3 is driven by qualitative temporal data. When the users finally arrive at
 
 Our visualization layout places the Layer 2 filters at the top, the Layer 1 map in the left-center, and the Layer 3 story window in the right-center. Most of the screen is used by the map which serves as the main center of attention for the user. 
 
-Visual Encodings
+### Visual Encodings
 
 The key pieces of information encoded in our map are US cities and the duration of sightings. We felt that duration was an appropriate attribute in the dataset to show differentiation among sightings in the country. We made this decision to add additional context to the data points and create a more compelling visualization. This not only helps navigation, it visually ties the duration histogram to the map. As mentioned before, this color scale is reflected in the corresponding histogram. Duration is aggregated based on the user’s filter selection of time. 
 
 We also considered using size as an encoding channel for duration but realized quickly through our prototypes that it would be a poor design choice, particularly when the user examines the data in large time frames. Data points with very long durations had large size encodings, which would often obscure state outlines and other data points with shorter durations.
 
-Animation
+### Animation
 
 There is significant delay in animation/interaction due to the large size of this dataset and need to comb through everything. We scaled back the time span from 60years, to 10, and finally the last 5. Further reductions do help this lag, but we wanted to leave a good amount of data available. If this were being published for a greater audience, we would take steps to improve performance.
 
 D3 animation was applied to show the change in sightings over time. When a user alters the time & shape filters, the data points on the map either dissolve or emerge. In the earlier explanation of the histograms, we explain the choice for which scales are updated based on filter change. All decisions were made based on the narrative, searching for something interesting.
 
-Interaction
+### Interaction
 
 For interaction, we have 2 sliders (duration of encounter and when it occurred) and a drop down menu for shape selection. The sliders were chosen because individuals who see the same thing will experience it around the same length and time, but not exact. Thus using a continuous control allows users to most effectively find like instances. For shape, we chose a discrete control because the duplicate sightings are described in the same ways.
 
 Additionally, we chose to provide a tooltip for users to glance at high-level information about a UFO sighting when they hover over a data point.This information includes city, shape, state, and a summary description of the sighting. The purpose of this interaction is to deliver the minimum-level of information that would potentially enable a user to click on the data point for the full story.
 
-
-DEVELOPMENT PROCESS
+## DEVELOPMENT PROCESS
 
 Dave & John are not computer scientists and programmers by training. The two of us are graduate students in the MIT IDM program, which teaches human-centered product design and interdisciplinary team leadership. 
 
@@ -55,13 +55,13 @@ Next, John & Dave went through a process of ideation and sketching before they b
 
 The visualization that we have submitted reflects our efforts to combine the interactive data visualization frameworks and concepts taught in class with our expertise in user experience, narrative & storytelling, and the human-centered design process.
 
-TIME
+## TIME
 
 Dave - It is hard to say how much time was spent on this project because I put a considerable amount of time into a crash course in javascript and d3js. In total, I probably spent around 5-6 hours on initial designs and sorting through datasets. For programming, I spent around 30 hours going through tutorials, MIT workshops, and practice exercises. Then I spent approximately another 20-30 hours programming for the project and debugging. 
 
 John - I likely spent 20-25 hours working on the HTML, CSS, and JavaScript styling of our interactive data visualization. Similar to Dave, I spent 5-6 years on design and 2-3 hours on data cleaning.
 
-SOURCES
+## SOURCES
 
 Data from https://www.kaggle.com/thaddeussegura/ufo-sightings
 
