@@ -41,7 +41,7 @@
   }
 
   #chart-area{
-    border: 4px solid #ccff40;
+    /*border: 4px solid #ccff40;*/
     background: #000000
     }
 
@@ -49,6 +49,12 @@
         fill: none;
         pointer-events: all;
       }
+
+
+.header {
+    text-align: center;
+}
+
   .filter-container {
       display: flex;
   }
@@ -81,10 +87,40 @@
 
 .chart-details-container {
     display: flex;
+    margin-top: 20px;
+}
+#chart-area {
+    background: black;
 }
 .chart {
+    overflow: hidden;
   flex: 1 1 70%;
 }
 .details {
+    background: black;
   flex: 1 1 30%;
+}
+#shape-select {
+    width: 100%;
+}
+.icon-container {
+    height: 130px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-icon] {
+    display: none;
+    height: 130px;
+}
+[data-icon].active {
+    display: block;
+}
+[data-icon] svg {
+    fill: white;
+    
+    height: 100px;
+    margin-top: 30px;
 }
