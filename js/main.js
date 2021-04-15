@@ -195,14 +195,14 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
         }
     })
 
-// let zoom = d3.zoom()
-//     .scaleExtent([1, 8])
-//     .translateExtent([[-500, -300], [1100, 700]])
-//     .on('zoom', () => {
-//         svg.attr('transform', d3.event.transform)
-//     }, {passive: true});
+let zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .translateExtent([[-500, -300], [1100, 700]])
+    .on('zoom', () => {
+        svg.attr('transform', d3.event.transform)
+    }, {passive: true});
  
-// svg.call(zoom);
+svg.call(zoom);
 
 
 
