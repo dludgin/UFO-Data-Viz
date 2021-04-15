@@ -213,7 +213,7 @@ svg.call(zoom);
         
         
     // load data  
-    var usMap = d3.csv("https://raw.githubusercontent.com/dludgin/ufoData/main/ufoV6(2010_2019)%20copy%202.csv");
+    var usMap = d3.csv("https://raw.githubusercontent.com/6859-sp21/a4-mapyourbreath/main/ufoV6(2010_2019).csv");
     var sightings = d3.csv("ufoV6(2010_2019).csv");
    
 Promise.all([usMap, sightings]).then(function(values){    
