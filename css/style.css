@@ -1,8 +1,7 @@
 #chart-area svg {
-	/* margin-left: auto;
-    margin-right: auto; */
+	margin-left: auto;
+    margin-right: auto;
     display: block;
-    /* border: 2px solid #ccff40; */
 }
 
 #logo {
@@ -12,14 +11,6 @@
 .navbar-brand {
 	height: 60px;
 	padding: 5px 0px;
-}
-
-#slider-div {
-	width:600px;
-	margin-left:20px;
-    margin-right:auto;
-    margin.bottom:50px;
-
 }
 
 #histo-div {
@@ -40,7 +31,6 @@
     margin: 0 auto;
     fill: #b90000;
  }
-
  .ui-slider-horizontal {
     background:#000000;
     stroke: #da0000;
@@ -59,3 +49,42 @@
         fill: none;
         pointer-events: all;
       }
+  .filter-container {
+      display: flex;
+  }
+  .filter {
+      width: 33.33%;
+      flex: 1 1 33.33%;
+      margin-right: 20px;
+  }
+  .filter:last-child {
+      margin-right: 0;
+  }
+
+.filter-controls {
+    box-sizing:border-box;
+    padding: 0 15px;
+    width:100%;
+    margin-right:auto;
+    margin-bottom:10px;
+}
+.filter-controls label {
+    display: block;
+}
+
+#duration-area {
+    width: 100%;
+}
+.filter svg {
+    width: 100%;
+}
+
+.chart-details-container {
+    display: flex;
+}
+.chart {
+  flex: 1 1 70%;
+}
+.details {
+  flex: 1 1 30%;
+}
