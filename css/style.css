@@ -12,6 +12,13 @@
 	height: 60px;
 	padding: 5px 0px;
 }
+#slider-div {
+	width:640px;
+	margin-left:20px;
+    margin-right:20px;
+    margin.bottom:50px;
+
+}
 
 #histo-div {
     margin-left: auto;
