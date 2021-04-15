@@ -1,3 +1,4 @@
+// height and width of Map
 var w = 600,
     h = 400,
     centered;
@@ -10,7 +11,7 @@ const durationBins = 120;
 
 var formatDur = d3.format(",.2~f");
 
-  //histogram setup
+  //Height and width for histograms
 var margin = {top: 20, right: 30, bottom: 50, left: 20},
     width = 600,
     height = 60;
