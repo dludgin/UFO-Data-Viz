@@ -212,7 +212,7 @@ svg.call(zoom);
     
         
         
-    // load data  https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json"
+    // load data  
     var usMap = d3.json("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json");
     var sightings = d3.csv("https://raw.githubusercontent.com/6859-sp21/a4-mapyourbreath/main/ufoV6(2010_2019).csv");
    
@@ -485,6 +485,11 @@ Promise.all([usMap, sightings]).then(function(values){
                     .transition(t)
                         .attr("y", d=> yD(d.length + 1))
                         .attr("height", function(d) { return height - yD(d.length + 1); })
+
+
+                            
+                
+
             }
 
 
