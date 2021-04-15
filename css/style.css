@@ -14,8 +14,9 @@
 }
 #slider-div {
 	width:640px;
-	margin-left:20px;
-    margin-right:20px;
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
     margin.bottom:50px;
 
 }
