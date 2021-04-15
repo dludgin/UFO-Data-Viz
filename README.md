@@ -59,7 +59,7 @@ The visualization that we have submitted reflects our efforts to combine the int
 
 Dave - It is hard to say how much time was spent on this project because I put a considerable amount of time into a crash course in javascript and d3js. In total, I probably spent around 5-6 hours on initial designs and sorting through datasets. For programming, I spent around 30 hours going through tutorials, MIT workshops, and practice exercises. Then I spent approximately another 20-30 hours programming for the project and debugging. 
 
-John - I likely spent 20-25 hours working on the HTML, CSS, and JavaScript styling of our interactive data visualization. Similar to Dave, I spent 5-6 years on design and 2-3 hours on data cleaning.
+John - I spent 20-25 hours working on the HTML, CSS, and JavaScript styling of our interactive data visualization. Similar to Dave, I spent 5-6 years on design exploration, ideation, and prototyping with an addition 2-3 hours spent on data cleaning.
 
 ## SOURCES
 
@@ -70,6 +70,6 @@ Majority of the coding for all components of the project were adapted from a cou
 Additional help for the map design: 
 https://bost.ocks.org/mike/map/
 
-Icons: Noun Project
+Icons: https://thenounproject.com/
 
 Inspiration: https://multimedia.scmp.com/culture/article/ufo/index.html
