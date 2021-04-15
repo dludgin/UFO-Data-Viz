@@ -418,4 +418,13 @@ Promise.all([usMap, sightings]).then(function(values){
             }
 
 
+const shapeSelect = document.querySelector('#shape-select');
+shapeSelect.addEventListener('change', (event) => {
+    const allIcons = document.querySelectorAll('[data-icon]');
+    const icon = document.querySelector(`[data-icon="${event.target.value}"]`);
+    allIcons.forEach(ic => ic.classList.remove('active'));
+    if (icon) {
+        icon.classList.add('active');
+    }
+});
 
