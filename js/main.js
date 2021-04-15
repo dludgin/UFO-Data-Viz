@@ -73,7 +73,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     var svgH = d3.select("#histo-area").append("svg").style("background-color","#000000").style("color","#ffffff")
         // .attr("transform", "translate(" + 10 + "," + 0 + ")")
 //         .attr("width", width + margin.left + margin.right)
-    	.attr("width", document.querySelector('#histo-div').clientWidth)
+    	.attr("width", document.querySelector('#slider-div').clientWidth)
         .attr("height", height + margin.top + margin.bottom)
         .append('g')
         .attr("transform", 
