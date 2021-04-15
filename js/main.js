@@ -1,4 +1,3 @@
-// height and width of Map
 var w = 600,
     h = 400,
     centered;
@@ -11,10 +10,12 @@ const durationBins = 120;
 
 var formatDur = d3.format(",.2~f");
 
-  //Height and width for histograms
-var margin = {top: 20, right: 30, bottom: 50, left: 20},
+  //histogram setup
+var margin = {top: 20, right: 30, bottom: 20, left: 20},
     width = 600,
     height = 60;
+
+    var durWidth = parseInt(d3.select("#duration-area").style("width"),10);
 
     const MARGIN = { LEFT: 100, RIGHT: 100, TOP: 50, BOTTOM: 100 }
     const WIDTH = 800 - MARGIN.LEFT - MARGIN.RIGHT
@@ -56,37 +57,28 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
             .base(10)
             .range([height, 0]);
 
-    // Parameters for the date historgram
+    // set the parameters for the histogram
     var histogram = d3.histogram()
         .value(function(d) { return d.date; })
         .domain(x.domain())
         .thresholds(x.ticks(d3.timeMonth));
 
-	//parameters for the duration histogram
     var histogramDur = d3.histogram()
         .value(function(d) { return d.Duration_mins; })
         .domain(xD.domain())
         .thresholds(xD.ticks(durationBins));
 
-
-	//margins for the date histogram
     var svgH = d3.select("#histo-area").append("svg").style("background-color","#000000").style("color","#ffffff")
-        // .attr("transform", "translate(" + 10 + "," + 0 + ")")
-//         .attr("width", width + margin.left + margin.right)
-    	.attr("width", document.querySelector('#histo-div').clientWidth)
         .attr("height", height + margin.top + margin.bottom)
-//     	.attr("width", 33.33%)
+        .attr('viewBox', '0 0 ' + (640) + ' ' + height)
         .append('g')
         .attr("transform", 
              "translate(" + margin.left + "," + margin.bottom + ")");
 
-//margins for the date duration
     var svgDH = d3.select("#duration-area").append("svg").style("background-color","#000000").style("color","#ffffff")
-        // .attr("transform", "translate(" + 10 + "," + 0 + ")")
-//         .attr("width", width + margin.left + margin.right)
-    	.attr("width", '33.33%')
         .attr("height", height + margin.top + margin.bottom)
-//         .attr("viewBox", (-margin.left) + (-margin.top) + width + height)
+        .attr('viewBox', '0 0 ' + (640) + ' ' + height)
+        .classed("svg-content", true)
         .append('g')
         .attr("transform", 
              "translate(" + margin.left + "," + margin.bottom + ")");
@@ -96,15 +88,12 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
     function getBaseLog(x, y) {
         return Math.log(y) / Math.log(x);
       }
-
+console.log(("#histo-area").width)
     
 
     var svg = d3.select("#chart-area").append("svg").style("background-color","#000000")
         .attr("viewBox", "0 0 " + w + " " + h)
-        // .style("border-width","1px")
-        // .style("border-color", "blue")
         .classed("svg-content", true);
-
 
 
     var projection = d3.geoAlbersUsa().translate([w/2, h/(2)]).scale(700);
@@ -148,6 +137,7 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
 
     // $(function () {
         $("#date-slider").slider({
+            width: document.querySelector('#slider-div').clientWidth,
             range: true,
             max: parseTime(maxDate).getTime(),
             min: parseTime(minDate).getTime(),
@@ -156,12 +146,6 @@ var margin = {top: 20, right: 30, bottom: 50, left: 20},
                 parseTime(minDate).getTime(),
                 parseTime(maxDate).getTime()
             ],
-            // create: (event, ui) => {
-            //     $("#dateLabel1").text(1262322000000),
-            //     $("#dateLabel2").text(1577768374944);
-            //     update();
-            // },
-            // slide: updateRange,
 
             slide: (event, ui) => {
                 $("#dateLabel1").text(formatTime(ui.values[0])),
@@ -244,41 +228,21 @@ Promise.all([usMap, sightings]).then(function(values){
         });
 
 
-
     
         let bins = histogram(formattedData);
 
         svgH.append("g")
-            .attr("transform", "translate(0," + (-margin.bottom) + ")")
+            .attr("transform", "translate(0," + (-(2*margin.bottom)) + ")")
             .call(d3.axisBottom(x));
 
         
-            // const sliderValues =([1262322000000, 1577768374944])
         var binsDur = histogramDur(formattedData);
-        // yD.domain([1, d3.max(binsDur, function(d) { return d.length; })]);
+
         
-        // svgDH.selectAll("rect")
-        //     .data(binsDur)
-        //     .enter().append("rect")
-        //     .attr("opacity",.8)
-        //     // .attr("fill", "#ccff40")
-        //     .style("fill", function(d){ return durScale(d.x0)})
-        //     // .attr("rect-anchor","center,bottom")
-        //     .attr("x", 0)
-        //         .attr("transform", function(d) { return "translate(" + xD(d.x0) + "," + yD(d.length + 1) + ")"; })
-        //         .attr("width", (width/(50)))
-        //         .attr("height", function(d) { return height - yD(d.length + 1); })
-        
-            svgDH.append("g")
-                .attr("transform", "translate(0," + (-margin.bottom) + ")")
-                .attr("class", "axis")
-                .call(d3.axisBottom(xD)
-                    .ticks(10)
-                    .tickFormat(d3.format(",.3~f")));
+
 
      
       $("#shape-select").on("change", update)
-
 
 
         update()
@@ -336,6 +300,8 @@ Promise.all([usMap, sightings]).then(function(values){
                 .attr("cx", d => (d.Lat))
                 .attr("text", d => (d.Summary))
                 .attr("fill", d => durScale((d.Duration_mins)))
+                
+                
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide)
                 .attr('d', function(d) {return (d);})
@@ -439,17 +405,18 @@ Promise.all([usMap, sightings]).then(function(values){
 
 
                             
+
+                    // add the x Axis
+
+                    svgDH.append("g")
+                .attr("transform", "translate(0," + (-(2*margin.bottom)) + ")")
+                .attr("class", "axis")
+                .call(d3.axisBottom(xD)
+                    .ticks(10)
+                    .tickFormat(d3.format(",.3~f")));
                 
 
             }
 
 
-const shapeSelect = document.querySelector('#shape-select');
-shapeSelect.addEventListener('change', (event) => {
-    const allIcons = document.querySelectorAll('[data-icon]');
-    const icon = document.querySelector(`[data-icon="${event.target.value}"]`);
-    allIcons.forEach(ic => ic.classList.remove('active'));
-    if (icon) {
-        icon.classList.add('active');
-    }
-});
+
