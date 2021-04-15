@@ -13,14 +13,6 @@
 	padding: 5px 0px;
 }
 
-#slider-div {
-	width:600px;
-	margin-left:20px;
-    margin-right:auto;
-    margin.bottom:50px;
-
-}
-
 #histo-div {
     margin-left: auto;
     margin-right: auto;
@@ -47,3 +39,43 @@
     data-theme: "b";
     data-track-theme = "a";
   }
+
+  .filter-container {
+      display: flex;
+  }
+  .filter {
+      width: 33.33%;
+      flex: 1 1 33.33%;
+      margin-right: 20px;
+  }
+  .filter:last-child {
+      margin-right: 0;
+  }
+
+.filter-controls {
+    box-sizing:border-box;
+    padding: 0 15px;
+    width:100%;
+    margin-right:auto;
+    margin-bottom:10px;
+}
+.filter-controls label {
+    display: block;
+}
+
+#duration-area {
+    width: 100%;
+}
+.filter svg {
+    width: 100%;
+}
+
+.chart-details-container {
+    display: flex;
+}
+.chart {
+  flex: 1 1 70%;
+}
+.details {
+  flex: 1 1 30%;
+}
