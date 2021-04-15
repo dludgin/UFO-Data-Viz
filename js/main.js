@@ -137,7 +137,6 @@ console.log(("#histo-area").width)
 
     // $(function () {
         $("#date-slider").slider({
-            width: document.querySelector('#slider-div').clientWidth,
             range: true,
             max: parseTime(maxDate).getTime(),
             min: parseTime(minDate).getTime(),
