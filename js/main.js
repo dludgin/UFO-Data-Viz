@@ -71,9 +71,9 @@ var margin = {top: 20, right: 30, bottom: 20, left: 20},
     var svgH = d3.select("#histo-area").append("svg").style("background-color","#000000").style("color","#ffffff")
         .attr("height", height + margin.top + margin.bottom)
         .attr('viewBox', '0 0 ' + (640) + ' ' + height)
-        .append('g')
-        .attr("transform", 
-             "translate(" + margin.left + "," + margin.bottom + ")");
+        .append('g');
+//         .attr("transform", 
+//              "translate(" + margin.left + "," + margin.bottom + ")");
 
     var svgDH = d3.select("#duration-area").append("svg").style("background-color","#000000").style("color","#ffffff")
         .attr("height", height + margin.top + margin.bottom)
