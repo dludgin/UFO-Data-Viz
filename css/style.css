@@ -12,16 +12,8 @@
 	height: 60px;
 	padding: 5px 0px;
 }
-#slider-div {
-	width:600px;
-	margin-left: auto;
-    margin-right: auto;
-/*     display: block; */
-
-}
 
 #histo-div {
-	width:600px;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -61,6 +53,13 @@
 
 .header {
     text-align: center;
+    font-family: fantasy;
+    color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-bottom: 0.5px;
+    font-size: 20px;
+    background-color: black;
 }
 
   .filter-container {
@@ -70,6 +69,15 @@
       width: 33.33%;
       flex: 1 1 33.33%;
       margin-right: 20px;
+      margin-top: 8px;
+      padding-top: 8px;
+      font-family: fantasy;
+      font-size: 13px;
+      color: white;
+      border-style: solid;
+        border-width: 1px;
+        border-color:rgb(255, 255, 255);
+        border-radius: 4px;
   }
   .filter:last-child {
       margin-right: 0;
