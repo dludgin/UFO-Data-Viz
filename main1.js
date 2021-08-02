@@ -2,7 +2,7 @@ var w = 600,
     h = 400,
     centered;
 const maxYear = 2019;
-const minYear = 2010;
+const minYear = 2015;
 const maxDate = "2019-12-31";
 const minDate = "2015-01-01";
 
