@@ -1,5 +1,4 @@
-# A4-mapyourbreath
-(New Team Name: Are we alone?)
+Are we alone?
 
 ## DESIGN RATIONALE
 
